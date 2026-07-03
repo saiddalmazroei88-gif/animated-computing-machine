@@ -1,336 +1,243 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CallPilot AI | Premium Virtual Reception</title>
-  <style>
-    :root {
-      --bg:#060b16; --bg-soft:#0d1526; --panel:rgba(12,22,38,0.92); --text:#f4f7ff; --muted:#9fb0cc; --accent:#4da3ff; --accent-strong:#2d7eff; --border:rgba(255,255,255,0.12);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Inter, Arial, sans-serif;background:linear-gradient(135deg,#060b16,#09121f);color:var(--text);line-height:1.6}
-    a{text-decoration:none;color:inherit}
-    section{padding:90px 7%}
-    .container{max-width:1200px;margin:0 auto}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 22px;border-radius:999px;font-weight:700;border:1px solid transparent;cursor:pointer;transition:transform .2s ease}
-    .btn:hover{transform:translateY(-2px)}
-    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-strong));color:white}
-    .btn-secondary{background:rgba(255,255,255,0.05);border-color:var(--border);color:white}
-    .topbar{position:sticky;top:0;z-index:10;background:rgba(6,11,22,0.8);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06)}
-    .nav{max-width:1200px;margin:0 auto;padding:16px 7%;display:flex;justify-content:space-between;align-items:center;gap:20px}
-    .brand{display:flex;align-items:center;gap:10px;font-weight:800}
-    .brand-mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#77b7ff);display:grid;place-items:center}
-    .nav-links{display:flex;gap:18px;color:var(--muted)}
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center;padding-top:70px}
-    .eyebrow{display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(77,163,255,0.16);color:#b9dcff;border:1px solid rgba(77,163,255,0.2);margin-bottom:16px}
-    h1{font-size:clamp(2.2rem,4.5vw,3.8rem);line-height:1.08;margin-bottom:16px}
-    .lead{color:var(--muted);font-size:1.03rem;max-width:650px}
-    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
-    .stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
-    .stat{padding:12px 14px;border-radius:16px;background:var(--panel);border:1px solid var(--border);min-width:130px}
-    .stat strong{display:block}
-    .hero-card{background:linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02));border:1px solid var(--border);border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35)}
-    .hero-card img{width:100%;height:420px;object-fit:cover}
-    .section-title{font-size:1.9rem;margin-bottom:10px}
-    .section-subtitle{color:var(--muted);max-width:700px;margin-bottom:30px}
-    .cards-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .card,.pricing-card,.testimonial-card,.faq-item,.step-card{background:var(--panel);border:1px solid var(--border);border-radius:22px;box-shadow:0 20px 60px rgba(0,0,0,0.28)}
-    .feature-card{padding:24px}
-    .feature-icon{width:44px;height:44px;border-radius:14px;background:rgba(77,163,255,0.16);display:grid;place-items:center;margin-bottom:14px;font-size:1.1rem}
-    .feature-card h3{margin-bottom:8px}
-    .feature-card p{color:var(--muted)}
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
-    .image-panel{border-radius:24px;overflow:hidden;border:1px solid var(--border)}
-    .image-panel img{height:420px;object-fit:cover;width:100%}
-    .check-list{display:grid;gap:10px;margin-top:15px;color:var(--muted)}
-    .check-list div{display:flex;gap:10px}
-    .check-list span{color:var(--accent);font-weight:800}
-    .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:24px}
-    .step-card{padding:22px}
-    .step-number{width:40px;height:40px;border-radius:50%;background:rgba(77,163,255,0.16);display:grid;place-items:center;font-weight:800;margin-bottom:12px;color:#b9dcff}
-    .industry-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-    .industry-pill{padding:14px 16px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,0.04);color:var(--muted)}
-    .pricing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .pricing-card{padding:24px}
-    .pricing-card.popular{border-color:rgba(77,163,255,0.35)}
-    .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(77,163,255,0.14);color:#b9dcff;font-size:0.76rem;margin-bottom:10px}
-    .price{font-size:2rem;font-weight:800;margin-top:8px;margin-bottom:6px}
-    .pricing-card ul{list-style:none;display:grid;gap:8px;color:var(--muted);margin:16px 0 20px}
-    .pricing-card li::before{content:'•';color:var(--accent);margin-right:8px}
-    .testimonial-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .testimonial-card{padding:24px}
-    .testimonial-card p{color:var(--muted);margin-bottom:16px}
-    .person{display:flex;align-items:center;gap:12px}
-    .avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#70b6ff);display:grid;place-items:center;font-weight:800}
-    .faq-list{display:grid;gap:12px}
-    .faq-item{padding:16px 18px}
-    .faq-item summary{cursor:pointer;font-weight:700;list-style:none}
-    .faq-item summary::-webkit-details-marker{display:none}
-    .faq-item p{color:var(--muted);margin-top:10px}
-    .contact-card{background:linear-gradient(135deg,rgba(77,163,255,0.16),rgba(255,255,255,0.03));border:1px solid var(--border);border-radius:28px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-    .inquiry-form{display:grid;gap:12px;margin-top:12px}
-    .inquiry-form input,.inquiry-form textarea{width:100%;padding:12px 14px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:white}
-    .inquiry-form input::placeholder,.inquiry-form textarea::placeholder{color:#89a1bf}
-    .info-list{display:grid;gap:10px;color:var(--muted);margin-top:16px}
-    .info-list a{color:#b9dcff}
-    .form-message{margin-top:10px;color:#b9dcff;font-size:.95rem}
-    footer{padding:24px 7% 38px;text-align:center;color:var(--muted)}
-    @media (max-width:980px){.hero,.split,.contact-card{grid-template-columns:1fr}.cards-grid,.steps,.industry-grid,.pricing-grid,.testimonial-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media (max-width:700px){section{padding:80px 5%}.nav{padding:16px 5%}.nav-links{display:none}.cards-grid,.steps,.industry-grid,.pricing-grid,.testimonial-grid{grid-template-columns:1fr}.hero-card img{height:320px}}
-  </style>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>CallPilot AI — Never Miss Another Business Call</title>
+	<meta name="description" content="CallPilot AI answers your business phone calls 24/7 using advanced AI—appointment booking, customer info, call forwarding, and summaries." />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <nav class="nav">
-      <a class="brand" href="#top"><span class="brand-mark">C</span><span>CallPilot AI</span></a>
-      <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <a class="btn btn-primary" href="#contact">Book a Free Consultation</a>
-    </nav>
-  </header>
+	<header class="site-header">
+		<div class="container header-inner">
+			<a class="logo" href="#">CallPilot AI</a>
+			<nav class="nav">
+				<a href="#features">Features</a>
+				<a href="#how">How It Works</a>
+				<a href="#industries">Industries</a>
+				<a href="#pricing">Pricing</a>
+				<a href="#contact" class="cta small">Contact Us</a>
+			</nav>
+			<button class="nav-toggle" aria-label="Toggle navigation">☰</button>
+		</div>
+	</header>
 
-  <main id="top">
-    <section class="hero container">
-      <div>
-        <div class="eyebrow">● Premium AI Phone Reception</div>
-        <h1>Never Miss Another Business Call Again.</h1>
-        <p class="lead">Your AI receptionist answers every call, every time. CallPilot AI uses natural voice technology to greet customers, answer questions, collect details, schedule appointments, and transfer urgent conversations when needed.</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#contact">Request a Demo</a>
-          <a class="btn btn-secondary" href="#pricing">See Pricing</a>
-        </div>
-        <div class="stats">
-          <div class="stat"><strong>24/7</strong><span>Always on</span></div>
-          <div class="stat"><strong>Instant</strong><span>Call summaries</span></div>
-          <div class="stat"><strong>Human</strong><span>Escalation ready</span></div>
-        </div>
-      </div>
-      <div class="hero-card">
-        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=900&q=80" alt="Business team using AI communication tools" />
-      </div>
-    </section>
+	<main>
+		<section class="hero">
+			<div class="container hero-grid">
+				<div class="hero-content">
+					<h1>Never Miss Another Business Call.</h1>
+					<p class="lead">CallPilot AI answers your business phone calls 24/7 using advanced artificial intelligence. It answers customer questions, books appointments, collects customer information, transfers urgent calls to your staff when needed, and helps your business deliver exceptional customer service around the clock.</p>
+					<div class="hero-ctas">
+						<a href="#contact" class="btn primary">Book a Free Consultation</a>
+						<a href="#pricing" class="btn ghost">View Pricing</a>
+					</div>
+					<ul class="trust-list">
+						<li>Secure · Reliable · Fast setup</li>
+					</ul>
+				</div>
+				<div class="hero-visual">
+					<div class="glass-card hero-card">
+						<svg viewBox="0 0 120 120" class="phone-illustration" aria-hidden="true">
+							<defs>
+								<linearGradient id="g1" x1="0" x2="1">
+									<stop offset="0" stop-color="#5ee7ff"/>
+									<stop offset="1" stop-color="#5b8cff"/>
+								</linearGradient>
+							</defs>
+							<rect x="10" y="12" width="100" height="96" rx="14" fill="url(#g1)" opacity="0.12"/>
+							<rect x="20" y="22" width="80" height="66" rx="8" fill="#0f1724" stroke="#1f2937"/>
+							<circle cx="60" cy="50" r="12" fill="#102027" stroke="#4fb7ff"/>
+							<path d="M38 82c8-4 16-6 22-6s14 2 22 6" stroke="#6fb7ff" stroke-width="2" fill="none" stroke-linecap="round"/>
+						</svg>
+						<div class="card-meta">
+							<strong>24/7 AI Call Answering</strong>
+							<span>Handles bookings, questions, transfers & summaries</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <section id="features">
-      <div class="container">
-        <h2 class="section-title">Features</h2>
-        <p class="section-subtitle">Modern tools for businesses that want dependable support and better customer experiences.</p>
-        <div class="cards-grid">
-          <article class="feature-card card">
-            <div class="feature-icon">📞</div>
-            <h3>24/7 call answering</h3>
-            <p>Every incoming call is handled professionally, even outside office hours.</p>
-          </article>
-          <article class="feature-card card">
-            <div class="feature-icon">🗣️</div>
-            <h3>Natural AI voice</h3>
-            <p>Friendly and human-like conversations that build trust with customers.</p>
-          </article>
-          <article class="feature-card card">
-            <div class="feature-icon">📝</div>
-            <h3>Call summaries</h3>
-            <p>Receive a clear recap after each conversation for fast follow-up.</p>
-          </article>
-          <article class="feature-card card">
-            <div class="feature-icon">📅</div>
-            <h3>Appointment booking</h3>
-            <p>Capture booking requests and route them to your calendar instantly.</p>
-          </article>
-          <article class="feature-card card">
-            <div class="feature-icon">💬</div>
-            <h3>FAQ automation</h3>
-            <p>Answers common questions about services, pricing, hours, and policies.</p>
-          </article>
-          <article class="feature-card card">
-            <div class="feature-icon">🧠</div>
-            <h3>Lead capture</h3>
-            <p>Collect customer details and send hot leads straight to your team.</p>
-          </article>
-        </div>
-      </div>
-    </section>
+		<section id="features" class="section features">
+			<div class="container">
+				<h2 class="section-title">Features</h2>
+				<div class="grid features-grid">
+					<div class="feature-card glass reveal">AI answers phone calls 24/7</div>
+					<div class="feature-card glass reveal">Natural, human-like conversations</div>
+					<div class="feature-card glass reveal">Appointment booking</div>
+					<div class="feature-card glass reveal">Customer information collection</div>
+					<div class="feature-card glass reveal">Call forwarding to staff</div>
+					<div class="feature-card glass reveal">Call summaries</div>
+					<div class="feature-card glass reveal">Multi-language support</div>
+					<div class="feature-card glass reveal">Fast setup</div>
+					<div class="feature-card glass reveal">Secure and reliable</div>
+				</div>
+			</div>
+		</section>
 
-    <section id="how-it-works">
-      <div class="container">
-        <div class="split">
-          <div class="image-panel">
-            <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1000&q=80" alt="AI support dashboard" />
-          </div>
-          <div>
-            <h2 class="section-title">How it works</h2>
-            <p class="section-subtitle">From the first hello to the final follow-up, CallPilot AI keeps your customer journey smooth and efficient.</p>
-            <div class="check-list">
-              <div><span>✓</span> Your business number is connected to a polished AI receptionist.</div>
-              <div><span>✓</span> The assistant handles FAQs, requests, and basic customer conversations.</div>
-              <div><span>✓</span> Important calls can be transferred to a human team member when needed.</div>
-              <div><span>✓</span> Every interaction ends with a call summary so your team can act quickly.</div>
-            </div>
-          </div>
-        </div>
-        <div class="steps">
-          <article class="step-card">
-            <div class="step-number">1</div>
-            <h3>Connect your number</h3>
-            <p>Set up your phone system in minutes with guided onboarding.</p>
-          </article>
-          <article class="step-card">
-            <div class="step-number">2</div>
-            <h3>Train on your business</h3>
-            <p>Customize responses for offerings, FAQs, booking rules, and escalation paths.</p>
-          </article>
-          <article class="step-card">
-            <div class="step-number">3</div>
-            <h3>Let AI engage callers</h3>
-            <p>Answer requests instantly and keep customers informed around the clock.</p>
-          </article>
-          <article class="step-card">
-            <div class="step-number">4</div>
-            <h3>Review and follow up</h3>
-            <p>Use call summaries and analytics to improve service quality and sales conversion.</p>
-          </article>
-        </div>
-      </div>
-    </section>
+		<section id="how" class="section how">
+			<div class="container">
+				<h2 class="section-title">How It Works</h2>
+				<div class="steps-grid">
+					<div class="step glass reveal">
+						<div class="step-num">1</div>
+						<h3>Connect your business phone number</h3>
+						<p>Seamless integration with existing phone systems or virtual numbers.</p>
+					</div>
+					<div class="step glass reveal">
+						<div class="step-num">2</div>
+						<h3>Train the AI with your business information</h3>
+						<p>Upload FAQs, hours, services and preferences so the AI sounds like you.</p>
+					</div>
+					<div class="step glass reveal">
+						<div class="step-num">3</div>
+						<h3>Let CallPilot AI answer customer calls automatically</h3>
+						<p>AI handles routine calls and escalates urgent ones to your team.</p>
+					</div>
+				</div>
+			</div>
+		</section>
 
-    <section>
-      <div class="container">
-        <h2 class="section-title">Industries we serve</h2>
-        <p class="section-subtitle">Built for organizations that want a premium first impression and better responsiveness.</p>
-        <div class="industry-grid">
-          <div class="industry-pill">Healthcare & Clinics</div>
-          <div class="industry-pill">Real Estate</div>
-          <div class="industry-pill">Salons & Spas</div>
-          <div class="industry-pill">Law Firms</div>
-          <div class="industry-pill">Home Services</div>
-          <div class="industry-pill">Consulting</div>
-          <div class="industry-pill">E-commerce</div>
-          <div class="industry-pill">Financial Advisors</div>
-        </div>
-      </div>
-    </section>
+		<section id="industries" class="section industries">
+			<div class="container">
+				<h2 class="section-title">Industries</h2>
+				<div class="grid industries-grid">
+					<div class="industry-card glass reveal">Car Garages</div>
+					<div class="industry-card glass reveal">Restaurants</div>
+					<div class="industry-card glass reveal">Medical Clinics</div>
+					<div class="industry-card glass reveal">Dental Clinics</div>
+					<div class="industry-card glass reveal">Beauty Salons</div>
+					<div class="industry-card glass reveal">Real Estate Agencies</div>
+					<div class="industry-card glass reveal">Law Firms</div>
+					<div class="industry-card glass reveal">Hotels</div>
+					<div class="industry-card glass reveal">Retail Stores</div>
+					<div class="industry-card glass reveal">Small Businesses</div>
+				</div>
+			</div>
+		</section>
 
-    <section id="pricing">
-      <div class="container">
-        <h2 class="section-title">Pricing</h2>
-        <p class="section-subtitle">Flexible plans for startups, growing companies, and enterprise teams.</p>
-        <div class="pricing-grid">
-          <article class="pricing-card">
-            <span class="tag">Starter</span>
-            <h3>Launch your AI receptionist</h3>
-            <div class="price">AED 399</div>
-            <p style="color:var(--muted)">Per month</p>
-            <ul>
-              <li>24/7 AI call answering</li>
-              <li>FAQ automation</li>
-              <li>Call summaries</li>
-            </ul>
-            <a class="btn btn-secondary" href="#contact">Get Started</a>
-          </article>
-          <article class="pricing-card popular">
-            <span class="tag">Most Popular</span>
-            <h3>Scale your support team</h3>
-            <div class="price">AED 899</div>
-            <p style="color:var(--muted)">Per month</p>
-            <ul>
-              <li>Everything in Starter</li>
-              <li>Appointment booking</li>
-              <li>Lead capture and transfer</li>
-            </ul>
-            <a class="btn btn-primary" href="#contact">Request a Demo</a>
-          </article>
-          <article class="pricing-card">
-            <span class="tag">Enterprise</span>
-            <h3>Advanced automation</h3>
-            <div class="price">Custom</div>
-            <p style="color:var(--muted)">Tailored for larger teams</p>
-            <ul>
-              <li>Unlimited call handling</li>
-              <li>Custom workflows</li>
-              <li>Priority onboarding</li>
-            </ul>
-            <a class="btn btn-secondary" href="#contact">Contact Sales</a>
-          </article>
-        </div>
-      </div>
-    </section>
+		<section id="why" class="section why">
+			<div class="container">
+				<h2 class="section-title">Why Choose CallPilot AI</h2>
+				<div class="grid why-grid">
+					<div class="why-card glass reveal">Never miss another customer</div>
+					<div class="why-card glass reveal">Save staff time</div>
+					<div class="why-card glass reveal">Professional customer experience</div>
+					<div class="why-card glass reveal">Available 24/7</div>
+					<div class="why-card glass reveal">Easy to customize</div>
+					<div class="why-card glass reveal">Built for businesses of all sizes</div>
+				</div>
+			</div>
+		</section>
 
-    <section>
-      <div class="container">
-        <h2 class="section-title">Frequently asked questions</h2>
-        <div class="faq-list">
-          <details class="faq-item">
-            <summary>Can it answer after hours?</summary>
-            <p>Yes. CallPilot AI works 24/7 and can handle helping customers even when your team is offline.</p>
-          </details>
-          <details class="faq-item">
-            <summary>Can it transfer urgent calls?</summary>
-            <p>Yes. The assistant can escalate urgent matters to your team when needed.</p>
-          </details>
-          <details class="faq-item">
-            <summary>Can it learn our services?</summary>
-            <p>Yes. We customize your AI receptionist around your business information and workflows.</p>
-          </details>
-        </div>
-      </div>
-    </section>
+		<section id="pricing" class="section pricing">
+			<div class="container">
+				<h2 class="section-title">Pricing</h2>
+				<div class="grid pricing-grid">
+					<div class="price-card glass reveal">
+						<div class="price-header">Starter</div>
+						<div class="price-amount">AED 399<span>/month</span></div>
+						<ul class="price-list">
+							<li>AI Call Answering</li>
+							<li>Business Information</li>
+							<li>Call Summaries</li>
+							<li>Email Support</li>
+						</ul>
+						<a href="#contact" class="btn primary">Get Started</a>
+					</div>
 
-    <section id="contact">
-      <div class="container">
-        <div class="contact-card">
-          <div>
-            <h2 class="section-title">Contact us today</h2>
-            <p class="section-subtitle">Buyers can enter their company name and request a demo, pricing, or onboarding assistance directly from this page.</p>
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="#inquiry-form">Request a Demo</a>
-              <a class="btn btn-secondary" href="tel:+971547867882">Call Now</a>
-            </div>
-          </div>
-          <div id="inquiry-form">
-            <h3>Request your consultation</h3>
-            <form class="inquiry-form" id="inquiryForm">
-              <input type="text" name="name" placeholder="Your Name" required />
-              <input type="text" name="company" placeholder="Company Name" required />
-              <input type="email" name="email" placeholder="Business Email" required />
-              <input type="tel" name="phone" placeholder="Phone Number" />
-              <textarea name="message" placeholder="Tell us what you need" rows="4"></textarea>
-              <button class="btn btn-primary" type="submit">Send Inquiry</button>
-            </form>
-            <div id="formMessage" class="form-message"></div>
-            <div class="info-list">
-              <div><strong>Email:</strong> <a href="mailto:saiddalmazroei88@gmail.com">saiddalmazroei88@gmail.com</a></div>
-              <div><strong>Phone / WhatsApp:</strong> <a href="https://wa.me/971547867882">+971 54 786 7882</a></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
+					<div class="price-card glass highlight reveal">
+						<div class="ribbon">Most Popular</div>
+						<div class="price-header">Professional</div>
+						<div class="price-amount">AED 899<span>/month</span></div>
+						<ul class="price-list">
+							<li>Everything in Starter</li>
+							<li>Appointment Booking</li>
+							<li>Advanced AI Conversations</li>
+							<li>Priority Support</li>
+						</ul>
+						<a href="#contact" class="btn primary">Choose Professional</a>
+					</div>
 
-  <footer>
-    © 2026 CallPilot AI. All rights reserved.
-  </footer>
+					<div class="price-card glass reveal">
+						<div class="price-header">Enterprise</div>
+						<div class="price-amount">Contact Us</div>
+						<ul class="price-list">
+							<li>Unlimited Calls</li>
+							<li>Custom AI Training</li>
+							<li>Multiple Business Locations</li>
+							<li>Dedicated Support</li>
+						</ul>
+						<a href="#contact" class="btn ghost">Contact Sales</a>
+					</div>
+				</div>
+			</div>
+		</section>
 
-  <script>
-    const form = document.getElementById('inquiryForm');
-    const message = document.getElementById('formMessage');
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-      const data = new FormData(form);
-      const name = data.get('name');
-      const company = data.get('company');
-      const email = data.get('email');
-      const phone = data.get('phone');
-      const messageText = data.get('message');
-      const subject = encodeURIComponent(`New CallPilot AI inquiry from ${company}`);
-      const body = encodeURIComponent(`Name: ${name}\nCompany: ${company}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\n\nMessage:\n${messageText || 'No additional message.'}`);
-      window.location.href = `mailto:saiddalmazroei88@gmail.com?subject=${subject}&body=${body}`;
-      message.textContent = 'Your inquiry is ready to be sent to your email inbox.';
-      form.reset();
-    });
-  </script>
+		<section id="faq" class="section faq">
+			<div class="container">
+				<h2 class="section-title">Frequently Asked Questions</h2>
+				<div class="faq-list">
+					<div class="faq-item glass reveal">
+						<button class="faq-q">How long does setup take?</button>
+						<div class="faq-a">Most customers are up and running within 24-72 hours depending on integrations and customizations.</div>
+					</div>
+					<div class="faq-item glass reveal">
+						<button class="faq-q">What types of businesses do you support?</button>
+						<div class="faq-a">CallPilot AI supports a wide range of industries including clinics, restaurants, retail, legal, real estate and more.</div>
+					</div>
+					<div class="faq-item glass reveal">
+						<button class="faq-q">Can the AI be customized?</button>
+						<div class="faq-a">Yes. You can train the AI with business-specific information and tone, and we offer custom training for Enterprise plans.</div>
+					</div>
+					<div class="faq-item glass reveal">
+						<button class="faq-q">Is CallPilot available 24/7?</button>
+						<div class="faq-a">Yes—CallPilot AI operates 24/7 to ensure you never miss important customer calls.</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section id="contact" class="section contact">
+			<div class="container contact-grid">
+				<div class="contact-card glass reveal">
+					<h2>Contact Us</h2>
+					<p>Email: <a href="mailto:saiddalmazroei88@gmail.com">saiddalmazroei88@gmail.com</a></p>
+					<p>Phone / WhatsApp: <a href="tel:+971547867882">+971 54 786 7882</a></p>
+					<div class="contact-ctas">
+						<a href="#" class="btn primary">Book a Free Consultation</a>
+						<a href="mailto:saiddalmazroei88@gmail.com" class="btn ghost">Contact Us Today</a>
+					</div>
+				</div>
+				<div class="contact-card glass reveal">
+					<h3>Get a quick demo</h3>
+					<p>Tell us about your business and we’ll show how CallPilot AI can help.</p>
+					<form class="contact-form" action="#">
+						<input type="text" name="name" placeholder="Your name" required>
+						<input type="email" name="email" placeholder="Email address" required>
+						<textarea name="message" placeholder="Tell us about your needs" rows="4"></textarea>
+						<button class="btn primary" type="submit">Request Demo</button>
+					</form>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="site-footer">
+		<div class="container footer-inner">
+			<div>© <span id="year"></span> CallPilot AI — All rights reserved.</div>
+			<div class="footer-links">
+				<a href="#privacy">Privacy</a>
+				<a href="#terms">Terms</a>
+			</div>
+		</div>
+	</footer>
+
+	<script src="script.js"></script>
 </body>
 </html>
+
